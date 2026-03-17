@@ -50,6 +50,28 @@ class _UserFormPageState extends State<UserFormPage> {
     'Prefer not to say',
   ];
 
+  String? _requiredText(String? value, String message) {
+    if (value == null || value.trim().isEmpty) {
+      return message;
+    }
+    return null;
+  }
+
+  String? _positiveNumber(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Required';
+    }
+    final number = double.tryParse(value);
+    if (number == null || number <= 0) {
+      return 'Invalid';
+    }
+    return null;
+  }
+
+  List<DropdownMenuItem<String>> _dropdownItems(List<String> values) {
+    return values.map((value) => DropdownMenuItem(value: value, child: Text(value))).toList();
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -133,12 +155,7 @@ class _UserFormPageState extends State<UserFormPage> {
                           prefixIcon: Icon(Icons.person_rounded),
                           border: OutlineInputBorder(),
                         ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your name.';
-                          }
-                          return null;
-                        },
+                        validator: (value) => _requiredText(value, 'Please enter your name.'),
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -155,16 +172,7 @@ class _UserFormPageState extends State<UserFormPage> {
                                 prefixIcon: Icon(Icons.straighten_rounded),
                                 border: OutlineInputBorder(),
                               ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Required';
-                                }
-                                final number = double.tryParse(value);
-                                if (number == null || number <= 0) {
-                                  return 'Invalid';
-                                }
-                                return null;
-                              },
+                              validator: _positiveNumber,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -180,16 +188,7 @@ class _UserFormPageState extends State<UserFormPage> {
                                 prefixIcon: Icon(Icons.monitor_weight_rounded),
                                 border: OutlineInputBorder(),
                               ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Required';
-                                }
-                                final number = double.tryParse(value);
-                                if (number == null || number <= 0) {
-                                  return 'Invalid';
-                                }
-                                return null;
-                              },
+                              validator: _positiveNumber,
                             ),
                           ),
                         ],
@@ -205,9 +204,7 @@ class _UserFormPageState extends State<UserFormPage> {
                                 prefixIcon: Icon(Icons.palette_rounded),
                                 border: OutlineInputBorder(),
                               ),
-                              items: _hairColors
-                                  .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-                                  .toList(),
+                              items: _dropdownItems(_hairColors),
                               onChanged: (value) => setState(() => _hairColor = value),
                               validator: (value) => value == null ? 'Please select a hair color.' : null,
                             ),
@@ -221,9 +218,7 @@ class _UserFormPageState extends State<UserFormPage> {
                                 prefixIcon: Icon(Icons.remove_red_eye_rounded),
                                 border: OutlineInputBorder(),
                               ),
-                              items: _eyeColors
-                                  .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-                                  .toList(),
+                              items: _dropdownItems(_eyeColors),
                               onChanged: (value) => setState(() => _eyeColor = value),
                               validator: (value) => value == null ? 'Please select an eye color.' : null,
                             ),
@@ -238,9 +233,7 @@ class _UserFormPageState extends State<UserFormPage> {
                           prefixIcon: Icon(Icons.wc_rounded),
                           border: OutlineInputBorder(),
                         ),
-                        items: _sexOptions
-                            .map((value) => DropdownMenuItem(value: value, child: Text(value)))
-                            .toList(),
+                        items: _dropdownItems(_sexOptions),
                         onChanged: (value) => setState(() => _sex = value),
                         validator: (value) => value == null ? 'Please select sex.' : null,
                       ),
@@ -254,12 +247,7 @@ class _UserFormPageState extends State<UserFormPage> {
                           prefixIcon: Icon(Icons.home_rounded),
                           border: OutlineInputBorder(),
                         ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter your address.';
-                          }
-                          return null;
-                        },
+                        validator: (value) => _requiredText(value, 'Please enter your address.'),
                       ),
                       const SizedBox(height: 18),
                       SizedBox(

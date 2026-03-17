@@ -10,7 +10,6 @@ String generateSampleId({
   final sexTag = (sex ?? 'NA').substring(0, 1).toUpperCase();
   final heightDigits = height.replaceAll(RegExp(r'[^0-9]'), '');
   final weightDigits = weight.replaceAll(RegExp(r'[^0-9]'), '');
-  final safeInitials = initials.isEmpty ? 'ID' : initials;
 
-  return '$safeInitials-$sexTag-${heightDigits.padLeft(3, '0')}-${weightDigits.padLeft(3, '0')}';
+  return '$initials-$sexTag-${heightDigits.padLeft(3, '0')}-${weightDigits.padLeft(3, '0')}';
 }
